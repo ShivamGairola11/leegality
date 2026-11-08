@@ -35,7 +35,7 @@ test("the cart is kept after a reload", async ({ page }) => {
   await page.getByRole("button", { name: "Add to cart" }).first().click();
   await page.reload();
   await expect(page.getByRole("link", { name: "Cart, 1 item" })).toBeVisible();
-  await expect(page.getByRole("group", { name: /Quantity for/ })).toBeVisible();
+  await expect(page.getByRole("article").getByRole("group", { name: /Quantity for/ })).toBeVisible();
 });
 
 test("buy now adds the product and opens the cart", async ({ page }) => {

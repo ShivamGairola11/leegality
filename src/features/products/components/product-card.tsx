@@ -16,14 +16,14 @@ import { StockStatus } from "./stock-status";
 
 interface ProductCardProps {
   product: ProductSummary;
-  priority?: boolean;
+  eager?: boolean;
 }
 
 export function productImageTransitionName(id: number) {
   return `product-image-${id}`;
 }
 
-export function ProductCard({ product, priority = false }: ProductCardProps) {
+export function ProductCard({ product, eager = false }: ProductCardProps) {
   return (
     <div className="flex w-full flex-col">
       <Link
@@ -42,7 +42,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                 src={product.thumbnail}
                 alt={product.title}
                 fill
-                priority={priority}
+                loading={eager ? "eager" : "lazy"}
+                fetchPriority={eager ? "high" : "auto"}
                 sizes="(min-width: 1536px) 18vw, (min-width: 1280px) 22vw, (min-width: 640px) 30vw, 45vw"
                 className="object-contain p-4 mix-blend-multiply transition-transform duration-300 group-hover:scale-105"
               />

@@ -12,9 +12,10 @@ interface CartLineProps {
   item: CartItem;
   onQuantityChange: (quantity: number) => void;
   onRemove: () => void;
+  eager?: boolean;
 }
 
-export function CartLine({ item, onQuantityChange, onRemove }: CartLineProps) {
+export function CartLine({ item, onQuantityChange, onRemove, eager = false }: CartLineProps) {
   const href = `/product/${item.id}`;
   const discount = getDiscount(item.discountPercentage);
 
@@ -29,6 +30,7 @@ export function CartLine({ item, onQuantityChange, onRemove }: CartLineProps) {
           alt={item.title}
           fill
           sizes="144px"
+          loading={eager ? "eager" : "lazy"}
           className="object-contain p-2 mix-blend-multiply"
         />
       </Link>

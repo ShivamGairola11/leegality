@@ -9,7 +9,7 @@ export function ProductGrid({ products }: { products: ProductSummary[] }) {
     <ul className={productGridClassName}>
       {products.map((product, index) => (
         <li key={product.id} className="flex">
-          <ProductCard product={product} priority={index < 4} />
+          <ProductCard product={product} eager={index < 4} />
         </li>
       ))}
     </ul>

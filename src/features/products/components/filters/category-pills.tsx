@@ -36,7 +36,7 @@ export function CategoryPills({
       role="group"
       aria-label="Categories"
       className={cn(
-        "-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:px-6",
+        "-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:-mx-6 sm:scroll-px-6 sm:px-6",
         className,
       )}
     >

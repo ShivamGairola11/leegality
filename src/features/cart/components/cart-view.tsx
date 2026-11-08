@@ -51,9 +51,10 @@ export function CartView() {
         <div className="grid items-start gap-8 lg:grid-cols-[1fr_340px]">
           <section aria-label="Cart items">
             <ul className="space-y-6">
-              {items.map((item) => (
+              {items.map((item, index) => (
                 <CartLine
                   key={item.id}
+                  eager={index < 3}
                   item={item}
                   onQuantityChange={(quantity) => setQuantity(item.id, quantity)}
                   onRemove={() => remove(item.id)}

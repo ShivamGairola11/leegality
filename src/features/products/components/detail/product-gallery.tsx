@@ -27,7 +27,8 @@ export function ProductGallery({ productId, images, title }: ProductGalleryProps
               src={src}
               alt={hasMany ? `${title}, image ${page} of ${images.length}` : title}
               fill
-              priority
+              loading="eager"
+              fetchPriority="high"
               sizes="(min-width: 1280px) 512px, (min-width: 768px) 448px, 90vw"
               className="animate-fade-in object-contain"
             />
