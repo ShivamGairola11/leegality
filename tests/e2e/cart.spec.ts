@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-test("add to cart, change quantity and review the cart", async ({ page }) => {
+test("add to cart, change quantity and review the cart", async ({ page, isMobile }) => {
   await page.goto("/?category=smartphones");
   const cartLink = page.getByRole("link", { name: /^Cart,/ });
   await expect(cartLink).toHaveAccessibleName("Cart, 0 items");
 
   await page.getByRole("button", { name: "Add to cart" }).first().click();
-  await expect(page.getByText("Added to cart")).toBeVisible();
+  if (isMobile) await expect(page.getByText("Added to cart")).toBeVisible();
+  else await expect(page.getByRole("complementary", { name: "Cart preview" })).toBeVisible();
   await expect(cartLink).toHaveAccessibleName("Cart, 1 item");
 
   await page.getByRole("button", { name: "Increase quantity" }).first().click();
@@ -48,4 +49,22 @@ test("profile shows a demo message", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Account" }).click();
   await expect(page.getByText("This is a demo")).toBeVisible();
+});
+
+test("cart rail opens with the first item and closes when the cart is emptied", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "the rail is only shown on large screens");
+  await page.goto("/?category=smartphones");
+  const rail = page.getByRole("complementary", { name: "Cart preview" });
+  await expect(rail).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Add to cart" }).first().click();
+  await expect(rail).toBeVisible();
+  await expect(rail.getByText("Subtotal")).toBeVisible();
+  await expect(rail.getByRole("link", { name: "Go to Cart" })).toBeVisible();
+
+  await rail.getByRole("button", { name: /^Remove .* from cart$/ }).click();
+  await expect(rail).toHaveCount(0);
 });

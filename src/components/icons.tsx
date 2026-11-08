@@ -66,7 +66,7 @@ export function ArrowRightIcon(props: IconProps) {
 export function CartIcon(props: IconProps) {
   return (
     <Icon {...props}>
-      <path d="M2 3h3l2.7 12.1a1 1 0 0 0 1 .9h9.6a1 1 0 0 0 1-.8L21 7H6" />
+      <path d="M2 3h3l2.7 12.1a1 1 0 0 0 1 .9h9.6a1 1 0 0 0 1-.8L21 7" />
       <circle cx="9.5" cy="20" r="1.5" />
       <circle cx="17.5" cy="20" r="1.5" />
     </Icon>

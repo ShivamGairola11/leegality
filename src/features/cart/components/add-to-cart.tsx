@@ -1,11 +1,13 @@
 /*
  * Yellow "Add to cart" pill that turns into a quantity stepper once the
- * product is in the cart, the way Amazon's listing cards behave.
+ * product is in the cart, the way Amazon's listing cards behave. On desktop
+ * the cart rail confirms the add, so the toast only shows on smaller screens.
  */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toaster";
+import { isDesktop } from "@/lib/breakpoints";
 import { cn } from "@/lib/utils";
 import { useCart } from "../hooks/use-cart";
 import { getMaxQuantity } from "../lib/cart";
@@ -46,6 +48,7 @@ export function AddToCart({ product, size = "sm", className }: AddToCartProps) {
 
   function handleAdd() {
     add(product);
+    if (isDesktop()) return;
     toast({
       tone: "success",
       title: "Added to cart",

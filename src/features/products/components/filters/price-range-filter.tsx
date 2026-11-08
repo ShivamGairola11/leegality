@@ -63,7 +63,7 @@ export function PriceRangeFilter({ minPrice, maxPrice, onApply }: PriceRangeFilt
           {error}
         </p>
       )}
-      <Button type="submit" className="w-full">
+      <Button type="submit" variant="outline" className="w-full">
         Apply
       </Button>
     </form>

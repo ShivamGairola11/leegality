@@ -6,8 +6,7 @@
 "use client";
 
 import { createContext, use, useMemo, useState, type ReactNode } from "react";
-
-const DESKTOP_QUERY = "(min-width: 1024px)";
+import { isDesktop } from "@/lib/breakpoints";
 
 interface SidebarContextValue {
   isDesktopOpen: boolean;
@@ -28,7 +27,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
       isDesktopOpen,
       isMobileOpen,
       toggle: () =>
-        window.matchMedia(DESKTOP_QUERY).matches
+        isDesktop()
           ? setDesktopOpen((open) => !open)
           : setMobileOpen((open) => !open),
       openMobile: () => setMobileOpen(true),

@@ -4,6 +4,7 @@ import {
   addItem,
   countItems,
   getMaxQuantity,
+  getSubtotal,
   removeItem,
   setItemQuantity,
 } from "@/features/cart/lib/cart";
@@ -54,4 +55,13 @@ test("removeItem and countItems", () => {
   const items = addItem(addItem([], product({ id: 1 }), 2), product({ id: 2 }), 3);
   expect(countItems(items)).toBe(5);
   expect(removeItem(items, 1).map((item) => item.id)).toEqual([2]);
+});
+
+test("getSubtotal sums discounted prices without float drift", () => {
+  const items = addItem(
+    addItem([], product({ id: 1, price: 9.99, discountPercentage: 10.48 }), 2),
+    product({ id: 2, price: 199.99, discountPercentage: 12.91 }),
+  );
+  expect(getSubtotal(items)).toBe(192.05);
+  expect(getSubtotal([])).toBe(0);
 });

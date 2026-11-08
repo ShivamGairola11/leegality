@@ -6,6 +6,7 @@ import { ProfileButton } from "@/components/layout/profile-button";
 import { SidebarProvider } from "@/components/layout/sidebar-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { CartLink } from "@/features/cart/components/cart-link";
+import { CartRail } from "@/features/cart/components/cart-rail";
 import { ProductSearch, ProductSearchFallback } from "@/features/products/components/product-search";
 import "./globals.css";
 
@@ -40,7 +41,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </>
             }
           />
-          <main className="flex flex-1 flex-col">{children}</main>
+          <div className="flex flex-1">
+            <main className="flex min-w-0 flex-1 flex-col">{children}</main>
+            <Suspense>
+              <CartRail />
+            </Suspense>
+          </div>
         </SidebarProvider>
         <Toaster />
       </body>

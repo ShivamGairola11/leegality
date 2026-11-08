@@ -26,7 +26,8 @@ An Amazon-style product listing and detail app built on the [DummyJSON Products 
 
 **Cart**
 - Yellow "Add to cart" button on every card and on the detail page, which turns into an Amazon-style quantity pill once the item is added (a trash icon at quantity 1)
-- Navbar cart with a live item count, an "Added to cart" toast with a "Go to cart" link, and "Buy now" on the detail page
+- Navbar cart with a live item count, and "Buy now" on the detail page
+- On desktop, an Amazon-style cart rail opens on the right with the first item (subtotal, "Go to Cart" and a stepper per item) and closes when the cart is emptied. Smaller screens get an "Added to cart" toast instead
 - `/cart` page with quantity controls, delete, and an order summary priced by DummyJSON's `POST /carts/add`
 - The cart is saved in `localStorage`, survives reloads, and stays in sync across tabs
 - Profile and checkout are demos and show a toast

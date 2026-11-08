@@ -2,6 +2,7 @@
  * Pure cart operations. Quantities are always kept between 1 and the lower of
  * the product's stock and MAX_QUANTITY_PER_ITEM; setting 0 removes the line.
  */
+import { getSalePrice } from "@/features/products/lib/pricing";
 import type { CartItem, CartProduct } from "../types";
 
 export const MAX_QUANTITY_PER_ITEM = 10;
@@ -39,4 +40,12 @@ export function removeItem(items: CartItem[], id: number) {
 
 export function countItems(items: CartItem[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+export function getSubtotal(items: CartItem[]) {
+  const cents = items.reduce(
+    (sum, item) => sum + Math.round(getSalePrice(item.price, item.discountPercentage) * 100) * item.quantity,
+    0,
+  );
+  return cents / 100;
 }
