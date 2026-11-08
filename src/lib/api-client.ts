@@ -3,7 +3,7 @@
  * 5xx responses are retried with a short backoff, since the public API
  * occasionally drops requests under load.
  */
-export const API_BASE_URL = "https://dummyjson.com";
+import { env } from "./env";
 
 const MAX_RETRIES = 2;
 const RETRY_DELAY_MS = 500;
@@ -26,7 +26,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
     const canRetry = attempt < MAX_RETRIES;
 
     try {
-      const response = await fetch(`${API_BASE_URL}${path}`, init);
+      const response = await fetch(`${env.apiBaseUrl}${path}`, init);
       if (response.ok) return (await response.json()) as T;
       if (!canRetry || !isRetryable(response.status)) {
         throw new ApiError(`Request to ${path} failed with status ${response.status}`, response.status);

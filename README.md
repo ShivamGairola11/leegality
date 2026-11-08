@@ -50,10 +50,19 @@ Requires Node.js 20+.
 
 ```bash
 npm install
+cp .env.example .env.local   # optional, the defaults work as-is
 npm run dev
 ```
 
 Open http://localhost:3000.
+
+### Environment variables
+
+| Variable                   | Default                 | Purpose                                                                                                         |
+| -------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_API_BASE_URL` | `https://dummyjson.com` | Base URL of the products API. Public because the cart is priced from the browser. It's inlined at build time, so rebuild after changing it. |
+
+All environment access goes through `src/lib/env.ts`, so nothing else reads `process.env` directly.
 
 | Script              | What it does                                 |
 | ------------------- | -------------------------------------------- |
