@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { getDiscount, getOriginalPrice, getStockLevel } from "@/features/products/lib/pricing";
+import { getDiscount, getSalePrice, getStockLevel } from "@/features/products/lib/pricing";
 
-test("getOriginalPrice reverses the discount", () => {
-  expect(getOriginalPrice(9.99, 10.48)).toBe(11.16);
-  expect(getOriginalPrice(100, 0)).toBe(100);
+test("getSalePrice takes the discount off the list price, like the carts API", () => {
+  expect(getSalePrice(9.99, 10.48)).toBe(8.94);
+  expect(getSalePrice(199.99, 12.91)).toBe(174.17);
+  expect(getSalePrice(100, 0)).toBe(100);
 });
 
 test("getDiscount rounds to a whole percent", () => {

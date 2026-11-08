@@ -2,9 +2,11 @@
  * The URL is the single source of truth for filters. These helpers convert
  * between query params and a typed ProductFilters object, and apply the
  * client-side filters (brand, price, search) and sorting to a product list.
+ * Price filters and sorting use the discounted sale price shown to users.
  */
 import { DEFAULT_FILTERS, FILTER_PARAMS, SEARCH_MIN_LENGTH, SORT_OPTIONS } from "../constants";
 import type { ProductFilters, ProductSummary, SortOption } from "../types";
+import { getSalePrice } from "./pricing";
 
 interface ReadableParams {
   get(name: string): string | null;
@@ -63,8 +65,9 @@ export function applyFilters(
 
   return products.filter((product) => {
     if (brands.length > 0 && !(product.brand && brands.includes(product.brand))) return false;
-    if (minPrice !== null && product.price < minPrice) return false;
-    if (maxPrice !== null && product.price > maxPrice) return false;
+    const salePrice = getSalePrice(product.price, product.discountPercentage);
+    if (minPrice !== null && salePrice < minPrice) return false;
+    if (maxPrice !== null && salePrice > maxPrice) return false;
     if (search) {
       const haystack = `${product.title} ${product.brand ?? ""}`.toLowerCase();
       if (!haystack.includes(search)) return false;
@@ -73,9 +76,12 @@ export function applyFilters(
   });
 }
 
+const salePriceOf = (product: ProductSummary) =>
+  getSalePrice(product.price, product.discountPercentage);
+
 const comparators: Record<SortOption, (a: ProductSummary, b: ProductSummary) => number> = {
-  "price-asc": (a, b) => a.price - b.price,
-  "price-desc": (a, b) => b.price - a.price,
+  "price-asc": (a, b) => salePriceOf(a) - salePriceOf(b),
+  "price-desc": (a, b) => salePriceOf(b) - salePriceOf(a),
   rating: (a, b) => b.rating - a.rating,
   discount: (a, b) => b.discountPercentage - a.discountPercentage,
   title: (a, b) => a.title.localeCompare(b.title),
