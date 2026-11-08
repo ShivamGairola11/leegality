@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Navbar } from "@/components/layout/navbar";
+import { ProfileButton } from "@/components/layout/profile-button";
 import { SidebarProvider } from "@/components/layout/sidebar-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { CartLink } from "@/features/cart/components/cart-link";
 import { ProductSearch, ProductSearchFallback } from "@/features/products/components/product-search";
 import "./globals.css";
 
@@ -30,9 +33,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <ProductSearch />
               </Suspense>
             }
+            actions={
+              <>
+                <CartLink />
+                <ProfileButton />
+              </>
+            }
           />
           <main className="flex flex-1 flex-col">{children}</main>
         </SidebarProvider>
+        <Toaster />
       </body>
     </html>
   );

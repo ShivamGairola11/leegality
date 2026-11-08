@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { Rating } from "@/components/ui/rating";
+import { BuyBox } from "@/features/cart/components/buy-box";
 import { formatLabel } from "@/lib/utils";
 import type { Product } from "../../types";
 import { PriceTag } from "../price-tag";
@@ -50,6 +51,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div>
               <StockStatus stock={product.stock} />
             </div>
+            <BuyBox product={product} />
             <dl className="space-y-1 text-sm">
               <div className="flex gap-1.5">
                 <dt className="font-semibold text-slate-800">Brand:</dt>
