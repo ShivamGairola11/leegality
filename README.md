@@ -24,6 +24,13 @@ An Amazon-style product listing and detail app built on the [DummyJSON Products 
 - Breadcrumbs, and a "More from this category" row
 - The product image morphs from the card into the detail page (React View Transitions)
 
+**Cart**
+- Yellow "Add to cart" button on every card and on the detail page, which turns into an Amazon-style quantity pill once the item is added (a trash icon at quantity 1)
+- Navbar cart with a live item count, an "Added to cart" toast with a "Go to cart" link, and "Buy now" on the detail page
+- `/cart` page with quantity controls, delete, and an order summary priced by DummyJSON's `POST /carts/add`
+- The cart is saved in `localStorage`, survives reloads, and stays in sync across tabs
+- Profile and checkout are demos and show a toast
+
 **General**
 - Filters live in the URL, so Back, refresh and shared links all keep them
 - Loading skeletons, an error state with retry, empty states and 404 pages
@@ -72,6 +79,7 @@ src/
 │   ├── layout/               # App shell: Navbar, sidebar state
 │   └── icons.tsx
 ├── features/
+│   ├── cart/                 # Cart store, pure cart logic, carts API, cart UI
 │   └── products/             # Everything specific to products
 │       ├── api/              # Data fetching (server only, cached)
 │       ├── components/       # Listing, filters/ and detail/ components
@@ -107,6 +115,12 @@ tests/
 - `useTransition` drives the loading skeleton while a new category loads.
 - The filter controls are disabled during that load so a click can't be lost.
 
+**The cart is an external store, not a context.**
+- Cart rules (add, clamp to stock, remove at zero) are pure functions in `features/cart/lib/cart.ts` with unit tests.
+- A small store adds `localStorage` persistence and syncs across tabs through the `storage` event. Components read it with `useSyncExternalStore`, so the server render and hydration see an empty cart and the saved cart appears right after, with no hydration mismatch and no provider.
+- The cart page sends the lines to `POST /carts/add` to get the list and discounted totals. The previous totals stay on screen while new ones load, and stale requests are aborted.
+- Toasts use the same store pattern, so `toast()` can be called from anywhere.
+
 **View transitions with React's `<ViewTransition>`.** The card image and the detail hero share a transition name, so the image morphs between pages without any animation library. Browsers without support just navigate normally, and the morph is turned off for users who prefer reduced motion.
 
 **Native platform features before custom code.**
@@ -125,18 +139,20 @@ tests/
 - Category is single-select (matches the API, which has one category per product), and brand is multi-select.
 - The full list for a category is loaded at once (`limit=0`; DummyJSON has about 194 products), so brand, price, search and sort are exact across all pages. Server-side `limit`/`skip` pagination would make brand and price filtering incomplete, because the API can't filter by them.
 - The price range applies on **Apply** (or Enter), as in the mockup, rather than on every keystroke.
-- `price` is the selling price. The struck-through original price is worked back from `discountPercentage`, and discounts that round to 0% are hidden.
+- `price` is the list price (M.R.P) and `discountPercentage` comes off it, which is how DummyJSON's carts API charges. The large price on cards, the price filter and price sorting all use that discounted price, so the listing and the cart agree. Discounts that round to 0% are hidden.
+- The carts API rounds each discounted line total to whole dollars, so the order total can differ from the per-item prices by a few cents. The API's figures are shown as the source of truth.
+- Quantity per item is capped at the product's stock and at 10.
 - Stock labels show "Only N left" at 5 or fewer and "Out of stock" at 0.
 - The "Top rated" tag on a card is shown for products rated 4.5 or higher. It comes from real data, not a made-up marketing label.
 - The large rating in the review summary is the product's overall `rating`. The bars break down the individual reviews the API returns, usually 3.
 - The pagination under the detail image in the mockup is used to page through the product's images, alongside thumbnails.
 - Navbar search matches product title and brand. The search box inside the filter panel narrows the category and brand lists.
-- Cart, orders and account icons are visual placeholders from the mockup.
+- Profile and checkout are out of scope. They show a demo toast instead of a fake sign-in or payment flow.
 - Products without a brand (some groceries) show "Unbranded" and are hidden when a brand filter is active.
 
 ## Improvements with more time
 
-- A working cart with persisted state, since the icons already exist
+- Sync the cart to a real user cart on the server (DummyJSON's cart endpoints only simulate writes)
 - Debounce the navbar search and add keyboard-navigable suggestions
 - Visual regression snapshots in Playwright
 - Image blur placeholders, and prefetching the next page of images
