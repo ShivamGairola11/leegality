@@ -7,7 +7,7 @@ import { cacheLife } from "next/cache";
 import { ApiError, apiFetch } from "@/lib/api-client";
 import type { Category, Product, ProductListResponse, ProductSummary } from "../types";
 
-const SUMMARY_FIELDS = "title,price,rating,thumbnail,brand,category";
+const SUMMARY_FIELDS = "title,price,discountPercentage,rating,stock,thumbnail,brand,category";
 
 export async function getCategories() {
   "use cache";

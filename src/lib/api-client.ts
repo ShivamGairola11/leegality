@@ -1,10 +1,12 @@
 /*
- * Thin fetch wrapper for DummyJSON. Network failures and 5xx responses are
- * retried once, since the public API occasionally drops a request.
+ * Thin fetch wrapper for DummyJSON. Network failures, rate limits (429) and
+ * 5xx responses are retried with a short backoff, since the public API
+ * occasionally drops requests under load.
  */
 export const API_BASE_URL = "https://dummyjson.com";
 
-const MAX_RETRIES = 1;
+const MAX_RETRIES = 2;
+const RETRY_DELAY_MS = 500;
 
 export class ApiError extends Error {
   readonly status: number;
@@ -16,23 +18,23 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(path: string, init?: RequestInit, attempt = 0): Promise<T> {
-  let response: Response;
+const isRetryable = (status: number) => status === 429 || status >= 500;
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  try {
-    response = await fetch(`${API_BASE_URL}${path}`, init);
-  } catch (error) {
-    if (attempt < MAX_RETRIES) return apiFetch<T>(path, init, attempt + 1);
-    throw error;
+export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    const canRetry = attempt < MAX_RETRIES;
+
+    try {
+      const response = await fetch(`${API_BASE_URL}${path}`, init);
+      if (response.ok) return (await response.json()) as T;
+      if (!canRetry || !isRetryable(response.status)) {
+        throw new ApiError(`Request to ${path} failed with status ${response.status}`, response.status);
+      }
+    } catch (error) {
+      if (error instanceof ApiError || !canRetry) throw error;
+    }
+
+    await wait(RETRY_DELAY_MS * (attempt + 1));
   }
-
-  if (response.status >= 500 && attempt < MAX_RETRIES) {
-    return apiFetch<T>(path, init, attempt + 1);
-  }
-
-  if (!response.ok) {
-    throw new ApiError(`Request to ${path} failed with status ${response.status}`, response.status);
-  }
-
-  return response.json() as Promise<T>;
 }

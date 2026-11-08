@@ -4,15 +4,16 @@ export function cn(...classes: ClassValue[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const priceFormatter = new Intl.NumberFormat("en-US", {
+const wholePriceFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 0,
 });
 
+const priceFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
 export function formatPrice(value: number) {
-  return priceFormatter.format(value);
+  return (Number.isInteger(value) ? wholePriceFormatter : priceFormatter).format(value);
 }
 
 export function formatLabel(slug: string) {

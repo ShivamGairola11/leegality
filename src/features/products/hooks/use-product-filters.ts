@@ -13,7 +13,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useOptimistic, useTransition } from "react";
 import { DEFAULT_FILTERS } from "../constants";
 import { parseFilters, serializeFilters } from "../lib/filters";
-import type { ProductFilters } from "../types";
+import type { ProductFilters, SortOption } from "../types";
 
 export function useProductFilters() {
   const searchParams = useSearchParams();
@@ -55,12 +55,13 @@ export function useProductFilters() {
     setPriceRange: (minPrice: number | null, maxPrice: number | null) =>
       replace({ ...filters, minPrice, maxPrice, page: 1 }),
     setQuery: (query: string) => replace({ ...filters, query, page: 1 }),
+    setSort: (sort: SortOption | null) => replace({ ...filters, sort, page: 1 }),
     setPage: (page: number) => {
       replace({ ...filters, page });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    clearFilters: () => {
-      const next = { ...DEFAULT_FILTERS, query: filters.query };
+    clearFilters: ({ keepQuery = true } = {}) => {
+      const next = { ...DEFAULT_FILTERS, query: keepQuery ? filters.query : "", sort: filters.sort };
       if (filters.category) navigate(next);
       else replace(next);
     },

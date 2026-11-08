@@ -1,3 +1,5 @@
+import type { SORT_OPTIONS } from "./constants";
+
 export interface Category {
   slug: string;
   name: string;
@@ -12,6 +14,8 @@ export interface Review {
   reviewerEmail: string;
 }
 
+export type AvailabilityStatus = "In Stock" | "Low Stock" | "Out of Stock";
+
 export interface Product {
   id: number;
   title: string;
@@ -25,11 +29,23 @@ export interface Product {
   thumbnail: string;
   images: string[];
   reviews: Review[];
+  availabilityStatus: AvailabilityStatus;
+  shippingInformation: string;
+  warrantyInformation: string;
+  returnPolicy: string;
 }
 
 export type ProductSummary = Pick<
   Product,
-  "id" | "title" | "price" | "rating" | "thumbnail" | "brand" | "category"
+  | "id"
+  | "title"
+  | "price"
+  | "discountPercentage"
+  | "rating"
+  | "stock"
+  | "thumbnail"
+  | "brand"
+  | "category"
 >;
 
 export interface ProductListResponse<T> {
@@ -39,11 +55,14 @@ export interface ProductListResponse<T> {
   limit: number;
 }
 
+export type SortOption = (typeof SORT_OPTIONS)[number]["value"];
+
 export interface ProductFilters {
   category: string | null;
   brands: string[];
   minPrice: number | null;
   maxPrice: number | null;
   query: string;
+  sort: SortOption | null;
   page: number;
 }

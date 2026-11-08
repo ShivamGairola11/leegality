@@ -12,11 +12,14 @@ import { cn } from "@/lib/utils";
 import { PAGE_SIZE } from "../constants";
 import { useProductFilters } from "../hooks/use-product-filters";
 import { markCatalogVisited } from "../lib/catalog-history";
-import { applyFilters, countActiveFilters, getBrands } from "../lib/filters";
+import { applyFilters, countActiveFilters, getBrands, sortProducts } from "../lib/filters";
 import type { Category, ProductSummary } from "../types";
+import { ActiveFilters } from "./filters/active-filters";
+import { CategoryPills } from "./filters/category-pills";
 import { FilterPanel, type FilterPanelProps } from "./filters/filter-panel";
 import { ProductGrid } from "./product-grid";
 import { ProductGridSkeleton } from "./product-skeletons";
+import { SortSelect } from "./sort-select";
 
 interface ProductBrowserProps {
   categories: Category[];
@@ -24,13 +27,25 @@ interface ProductBrowserProps {
 }
 
 export function ProductBrowser({ categories, products }: ProductBrowserProps) {
-  const { filters, isPending, setCategory, toggleBrand, setPriceRange, setPage, clearFilters } =
-    useProductFilters();
+  const {
+    filters,
+    isPending,
+    setCategory,
+    toggleBrand,
+    setPriceRange,
+    setQuery,
+    setSort,
+    setPage,
+    clearFilters,
+  } = useProductFilters();
   const { isDesktopOpen, isMobileOpen, toggle, closeMobile } = useSidebar();
 
   const brands = useMemo(() => getBrands(products), [products]);
-  const filtered = useMemo(() => applyFilters(products, filters), [products, filters]);
-  const { items, currentPage, totalPages } = paginate(filtered, filters.page, PAGE_SIZE);
+  const visible = useMemo(
+    () => sortProducts(applyFilters(products, filters), filters.sort),
+    [products, filters],
+  );
+  const { items, currentPage, totalPages } = paginate(visible, filters.page, PAGE_SIZE);
   const activeCount = countActiveFilters(filters);
 
   useEffect(markCatalogVisited, []);
@@ -44,7 +59,7 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
     onCategoryChange: setCategory,
     onBrandToggle: toggleBrand,
     onPriceApply: setPriceRange,
-    onClear: clearFilters,
+    onClear: () => clearFilters(),
   };
 
   return (
@@ -82,10 +97,31 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
               </span>
             )}
           </Button>
-          <p aria-live="polite" className="text-sm text-slate-500">
-            {isPending ? "Loading…" : `${filtered.length} products`}
-          </p>
+          <div className="flex items-center gap-3">
+            <p aria-live="polite" className="text-sm text-slate-500 max-sm:hidden">
+              {isPending ? "Loading…" : `${visible.length} products`}
+            </p>
+            <SortSelect value={filters.sort} onChange={setSort} />
+          </div>
         </div>
+
+        <CategoryPills
+          categories={categories}
+          selected={filters.category}
+          disabled={isPending}
+          onSelect={setCategory}
+          className="mb-4 lg:hidden"
+        />
+
+        <ActiveFilters
+          filters={filters}
+          categories={categories}
+          onCategoryClear={() => setCategory(null)}
+          onBrandRemove={toggleBrand}
+          onPriceClear={() => setPriceRange(null, null)}
+          onQueryClear={() => setQuery("")}
+          onClearAll={() => clearFilters({ keepQuery: false })}
+        />
 
         {isPending ? (
           <ProductGridSkeleton />
@@ -105,8 +141,8 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
             title="No products found"
             description="Try a different search, or loosen the price range and brand filters."
             action={
-              activeCount > 0 && (
-                <Button variant="outline" onClick={clearFilters}>
+              (activeCount > 0 || filters.query) && (
+                <Button variant="outline" onClick={() => clearFilters({ keepQuery: false })}>
                   Clear all filters
                 </Button>
               )

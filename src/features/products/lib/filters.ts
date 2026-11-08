@@ -1,10 +1,10 @@
 /*
  * The URL is the single source of truth for filters. These helpers convert
  * between query params and a typed ProductFilters object, and apply the
- * client-side filters (brand, price, search) to a list of products.
+ * client-side filters (brand, price, search) and sorting to a product list.
  */
-import { DEFAULT_FILTERS, FILTER_PARAMS } from "../constants";
-import type { ProductFilters, ProductSummary } from "../types";
+import { DEFAULT_FILTERS, FILTER_PARAMS, SORT_OPTIONS } from "../constants";
+import type { ProductFilters, ProductSummary, SortOption } from "../types";
 
 interface ReadableParams {
   get(name: string): string | null;
@@ -17,6 +17,10 @@ function toPrice(value: string | null) {
   return Number.isFinite(price) && price >= 0 ? price : null;
 }
 
+function toSort(value: string | null): SortOption | null {
+  return SORT_OPTIONS.find((option) => option.value === value)?.value ?? null;
+}
+
 export function parseFilters(params: ReadableParams): ProductFilters {
   const page = Number(params.get(FILTER_PARAMS.page));
 
@@ -26,6 +30,7 @@ export function parseFilters(params: ReadableParams): ProductFilters {
     minPrice: toPrice(params.get(FILTER_PARAMS.minPrice)),
     maxPrice: toPrice(params.get(FILTER_PARAMS.maxPrice)),
     query: params.get(FILTER_PARAMS.query) ?? "",
+    sort: toSort(params.get(FILTER_PARAMS.sort)),
     page: Number.isInteger(page) && page > 0 ? page : DEFAULT_FILTERS.page,
   };
 }
@@ -38,6 +43,7 @@ export function serializeFilters(filters: ProductFilters) {
   if (filters.minPrice !== null) params.set(FILTER_PARAMS.minPrice, String(filters.minPrice));
   if (filters.maxPrice !== null) params.set(FILTER_PARAMS.maxPrice, String(filters.maxPrice));
   if (filters.query) params.set(FILTER_PARAMS.query, filters.query);
+  if (filters.sort) params.set(FILTER_PARAMS.sort, filters.sort);
   if (filters.page > 1) params.set(FILTER_PARAMS.page, String(filters.page));
 
   const query = params.toString();
@@ -60,6 +66,18 @@ export function applyFilters(
     }
     return true;
   });
+}
+
+const comparators: Record<SortOption, (a: ProductSummary, b: ProductSummary) => number> = {
+  "price-asc": (a, b) => a.price - b.price,
+  "price-desc": (a, b) => b.price - a.price,
+  rating: (a, b) => b.rating - a.rating,
+  discount: (a, b) => b.discountPercentage - a.discountPercentage,
+  title: (a, b) => a.title.localeCompare(b.title),
+};
+
+export function sortProducts(products: ProductSummary[], sort: SortOption | null) {
+  return sort ? products.toSorted(comparators[sort]) : products;
 }
 
 export function getBrands(products: ProductSummary[]) {

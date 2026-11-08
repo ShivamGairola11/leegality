@@ -8,11 +8,21 @@
   --breakpoint-3xl: 112rem;
 
   --color-navbar: #2f3e50;
-  --color-navbar-muted: #3d4f63;
   --color-canvas: #f3f4f6;
   --color-primary: #2d8cf0;
   --color-primary-hover: #1c78d8;
   --color-star: #f5b400;
+
+  --animate-fade-in: fade-in 200ms ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 body {
@@ -27,4 +37,17 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+::view-transition-group(.morph) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
