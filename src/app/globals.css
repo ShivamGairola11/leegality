@@ -19,6 +19,12 @@
   --color-primary-hover: #1c78d8;
   --color-star: #f5a623;
   --color-deal: #cc0c39;
+  --color-cta: #ffd814;
+  --color-cta-hover: #f7ca00;
+  --color-buy: #ffa41c;
+  --color-buy-hover: #fa8900;
+  --color-cart-count: #f08804;
+  --color-success: #007600;
 
   --animate-fade-in: fade-in 200ms ease-out;
 

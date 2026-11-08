@@ -32,7 +32,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
         throw new ApiError(`Request to ${path} failed with status ${response.status}`, response.status);
       }
     } catch (error) {
-      if (error instanceof ApiError || !canRetry) throw error;
+      if (error instanceof ApiError || !canRetry || init?.signal?.aborted) throw error;
     }
 
     await wait(RETRY_DELAY_MS * (attempt + 1));

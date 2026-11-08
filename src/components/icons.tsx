@@ -65,19 +65,10 @@ export function ArrowRightIcon(props: IconProps) {
 
 export function CartIcon(props: IconProps) {
   return (
-    <Icon fill="currentColor" stroke="none" {...props}>
-      <path d="M3 3h2.2l.6 2H21l-2.2 8.2a1.5 1.5 0 0 1-1.45 1.1H8.6l.5 1.7H19v2H7.6L4.7 5H3V3Z" />
-      <circle cx="9" cy="20.5" r="1.5" />
-      <circle cx="17" cy="20.5" r="1.5" />
-    </Icon>
-  );
-}
-
-export function ChartIcon(props: IconProps) {
-  return (
     <Icon {...props}>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 3v9h9" fill="currentColor" />
+      <path d="M2 3h3l2.7 12.1a1 1 0 0 0 1 .9h9.6a1 1 0 0 0 1-.8L21 7H6" />
+      <circle cx="9.5" cy="20" r="1.5" />
+      <circle cx="17.5" cy="20" r="1.5" />
     </Icon>
   );
 }
@@ -159,6 +150,48 @@ export function SlidersIcon(props: IconProps) {
       <circle cx="16" cy="6" r="2" />
       <circle cx="10" cy="12" r="2" />
       <circle cx="18" cy="18" r="2" />
+    </Icon>
+  );
+}
+
+export function PlusIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </Icon>
+  );
+}
+
+export function MinusIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M5 12h14" />
+    </Icon>
+  );
+}
+
+export function TrashIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+    </Icon>
+  );
+}
+
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="m8 12 3 3 5-6" />
+    </Icon>
+  );
+}
+
+export function InfoIcon(props: IconProps) {
+  return (
+    <Icon {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5M12 8h.01" />
     </Icon>
   );
 }

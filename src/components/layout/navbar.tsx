@@ -1,9 +1,12 @@
 import { Suspense, type ReactNode } from "react";
-import { CartIcon, ChartIcon, UserIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { SidebarTrigger, SidebarTriggerFallback } from "./sidebar-trigger";
 
-export function Navbar({ search }: { search: ReactNode }) {
+interface NavbarProps {
+  search: ReactNode;
+  actions: ReactNode;
+}
+
+export function Navbar({ search, actions }: NavbarProps) {
   return (
     <header className="sticky top-0 z-30 bg-navbar shadow-sm">
       <div className="flex h-14 items-center gap-2 px-2 sm:gap-4 sm:px-6">
@@ -15,16 +18,8 @@ export function Navbar({ search }: { search: ReactNode }) {
           <div className="w-full max-w-xl">{search}</div>
         </div>
 
-        <nav aria-label="Account" className="flex items-center">
-          <Button variant="icon" size="icon" aria-label="Cart">
-            <CartIcon />
-          </Button>
-          <Button variant="icon" size="icon" aria-label="Orders" className="max-sm:hidden">
-            <ChartIcon />
-          </Button>
-          <Button variant="icon" size="icon" aria-label="Account">
-            <UserIcon />
-          </Button>
+        <nav aria-label="Account" className="flex items-center gap-1">
+          {actions}
         </nav>
       </div>
     </header>
