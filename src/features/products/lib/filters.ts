@@ -3,7 +3,7 @@
  * between query params and a typed ProductFilters object, and apply the
  * client-side filters (brand, price, search) and sorting to a product list.
  */
-import { DEFAULT_FILTERS, FILTER_PARAMS, SORT_OPTIONS } from "../constants";
+import { DEFAULT_FILTERS, FILTER_PARAMS, SEARCH_MIN_LENGTH, SORT_OPTIONS } from "../constants";
 import type { ProductFilters, ProductSummary, SortOption } from "../types";
 
 interface ReadableParams {
@@ -48,6 +48,11 @@ export function serializeFilters(filters: ProductFilters) {
 
   const query = params.toString();
   return query ? `?${query}` : "";
+}
+
+export function toSearchQuery(input: string) {
+  const query = input.trim();
+  return query.length >= SEARCH_MIN_LENGTH ? query : "";
 }
 
 export function applyFilters(

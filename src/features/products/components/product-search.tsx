@@ -1,16 +1,18 @@
 /*
- * Navbar search. On the catalog it filters live as you type; on any other
- * page, submitting takes you back to the catalog with the query applied.
+ * Navbar search. On the catalog it filters as you type, debounced, and only
+ * once the query has at least SEARCH_MIN_LENGTH characters; Enter applies it
+ * straight away. On any other page, Enter takes you back to the catalog with
+ * the query applied.
  */
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useEffectEvent, useState, type FormEvent } from "react";
 import { SearchIcon } from "@/components/icons";
 import { Input } from "@/components/ui/input";
-import { DEFAULT_FILTERS } from "../constants";
+import { DEFAULT_FILTERS, SEARCH_DEBOUNCE_MS } from "../constants";
 import { useProductFilters } from "../hooks/use-product-filters";
-import { serializeFilters } from "../lib/filters";
+import { serializeFilters, toSearchQuery } from "../lib/filters";
 
 const inputClassName = "h-9 border-transparent bg-white";
 
@@ -28,14 +30,29 @@ export function ProductSearch() {
     setValue(filters.query);
   }
 
-  function handleChange(next: string) {
-    setValue(next);
-    if (isCatalog) setQuery(next);
+  function commit(input: string) {
+    const query = toSearchQuery(input);
+    if (query === syncedQuery) return;
+    setSyncedQuery(query);
+    setQuery(query);
   }
+
+  const commitLatest = useEffectEvent(commit);
+
+  useEffect(() => {
+    if (!isCatalog) return;
+    const timer = setTimeout(() => commitLatest(value), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timer);
+  }, [value, isCatalog]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!isCatalog) router.push(`/${serializeFilters({ ...DEFAULT_FILTERS, query: value.trim() })}`);
+    if (isCatalog) {
+      commit(value);
+      return;
+    }
+    const query = toSearchQuery(value);
+    router.push(`/${serializeFilters({ ...DEFAULT_FILTERS, query })}`);
   }
 
   return (
@@ -45,7 +62,7 @@ export function ProductSearch() {
         aria-label="Search products"
         placeholder="Search products..."
         value={value}
-        onChange={(event) => handleChange(event.target.value)}
+        onChange={(event) => setValue(event.target.value)}
         icon={<SearchIcon width={16} height={16} />}
         className={inputClassName}
       />

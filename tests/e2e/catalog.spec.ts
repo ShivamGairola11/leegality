@@ -101,6 +101,23 @@ test("navbar search filters the list as you type", async ({ page }) => {
   await expect(page.getByRole("link", { name: /mascara/i })).toHaveCount(0);
 });
 
+test("navbar search waits for 3 characters before filtering", async ({ page }) => {
+  await page.goto("/");
+  const search = page.getByRole("searchbox", { name: "Search products" });
+
+  await search.fill("ip");
+  await page.waitForTimeout(600);
+  await expect(page).not.toHaveURL(/q=/);
+  await expect(productCards(page)).toHaveCount(12);
+
+  await search.fill("iph");
+  await expect(page).toHaveURL(/q=iph/);
+
+  await search.fill("ip");
+  await expect(page).not.toHaveURL(/q=/);
+  await expect(search).toHaveValue("ip");
+});
+
 test("rejects a min price above the max price", async ({ page, isMobile }) => {
   await page.goto("/");
   const filters = await openFilters(page, isMobile);

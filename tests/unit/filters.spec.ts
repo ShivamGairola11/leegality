@@ -7,6 +7,7 @@ import {
   parseFilters,
   serializeFilters,
   sortProducts,
+  toSearchQuery,
 } from "@/features/products/lib/filters";
 import type { ProductFilters, ProductSummary } from "@/features/products/types";
 
@@ -102,4 +103,10 @@ test("countActiveFilters counts the price range once", () => {
   expect(
     countActiveFilters({ ...DEFAULT_FILTERS, category: "x", brands: ["a", "b"], minPrice: 1, maxPrice: 9 }),
   ).toBe(4);
+});
+
+test("toSearchQuery ignores queries shorter than 3 characters", () => {
+  expect(toSearchQuery("ip")).toBe("");
+  expect(toSearchQuery("  ip  ")).toBe("");
+  expect(toSearchQuery(" iph ")).toBe("iph");
 });
