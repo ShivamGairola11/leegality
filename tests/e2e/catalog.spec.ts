@@ -18,7 +18,7 @@ async function prices(page: Page) {
 test("lists products with categories loaded from the API", async ({ page, isMobile }) => {
   await page.goto("/");
 
-  await expect(productCards(page)).toHaveCount(12);
+  await expect(productCards(page)).toHaveCount(25);
   const filters = await openFilters(page, isMobile);
   await expect(filters.getByLabel("Beauty", { exact: true })).toBeVisible();
 
@@ -108,7 +108,7 @@ test("navbar search waits for 3 characters before filtering", async ({ page }) =
   await search.fill("ip");
   await page.waitForTimeout(600);
   await expect(page).not.toHaveURL(/q=/);
-  await expect(productCards(page)).toHaveCount(12);
+  await expect(productCards(page)).toHaveCount(25);
 
   await search.fill("iph");
   await expect(page).toHaveURL(/q=iph/);

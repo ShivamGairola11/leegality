@@ -9,7 +9,7 @@ An Amazon-style product listing and detail app built on the [DummyJSON Products 
 ## Features
 
 **Listing**
-- Product grid showing image, title, price with discount, rating and low-stock labels. 12 products per page, and the grid uses the full screen width (2 to 6 columns)
+- Product grid showing image, title, price with discount, rating and low-stock labels. 25 products per page, and the grid uses the full screen width (2 to 6 columns)
 - Filters for category (loaded from the API), price range and brand (taken from the loaded products), all combinable
 - Sorting by price, rating, discount or name
 - Removable chips for every active filter, plus a "Clear all" button

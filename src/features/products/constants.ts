@@ -1,6 +1,6 @@
 import type { ProductFilters } from "./types";
 
-export const PAGE_SIZE = 12;
+export const PAGE_SIZE = 25;
 
 export const LOW_STOCK_THRESHOLD = 5;
 
