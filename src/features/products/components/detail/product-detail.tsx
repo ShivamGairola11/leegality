@@ -17,8 +17,8 @@ export function ProductDetail({ product }: { product: Product }) {
   const category = formatLabel(product.category);
 
   return (
-    <div className="px-4 py-4 sm:px-6 lg:py-6">
-      <div className="mb-4">
+    <div className="flex-1 bg-white px-4 py-4 sm:px-6 lg:py-6">
+      <div className="mb-6">
         <Breadcrumbs
           items={[
             { label: "Home", href: "/" },
@@ -28,14 +28,14 @@ export function ProductDetail({ product }: { product: Product }) {
         />
       </div>
 
-      <article className="grid gap-6 rounded-lg bg-white p-4 shadow-sm sm:p-6 md:grid-cols-2 md:gap-0">
-        <div className="flex flex-col gap-4 md:sticky md:top-20 md:self-start md:pr-8">
+      <article className="grid gap-8 md:grid-cols-2 lg:gap-12">
+        <div className="flex flex-col gap-4 md:sticky md:top-20 md:self-start">
           <BackButton />
           <ProductGallery productId={product.id} images={images} title={product.title} />
         </div>
 
-        <div className="divide-y divide-gray-200 md:border-l md:border-gray-200 md:pl-8">
-          <section className="space-y-3 pb-5">
+        <div className="space-y-8">
+          <section className="space-y-3">
             <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">{product.title}</h1>
             <div className="flex flex-wrap items-center gap-2 text-sm text-slate-500">
               <Rating value={product.rating} size="md" />
@@ -63,7 +63,7 @@ export function ProductDetail({ product }: { product: Product }) {
             </dl>
           </section>
 
-          <section aria-label="Delivery and returns" className="py-5">
+          <section aria-label="Delivery and returns">
             <ProductHighlights
               shippingInformation={product.shippingInformation}
               warrantyInformation={product.warrantyInformation}
@@ -71,12 +71,12 @@ export function ProductDetail({ product }: { product: Product }) {
             />
           </section>
 
-          <section className="space-y-2 py-5">
+          <section className="space-y-2">
             <h2 className="text-base font-semibold text-slate-900">Description</h2>
             <p className="max-w-prose text-sm leading-relaxed text-slate-600">{product.description}</p>
           </section>
 
-          <section className="space-y-3 pt-5">
+          <section className="space-y-3">
             <h2 className="text-base font-semibold text-slate-900">Reviews</h2>
             <ProductReviews rating={product.rating} reviews={product.reviews} />
           </section>

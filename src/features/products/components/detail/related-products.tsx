@@ -17,7 +17,7 @@ export async function RelatedProducts({ category, excludeId }: RelatedProductsPr
   if (products.length === 0) return null;
 
   return (
-    <section aria-labelledby="related-heading" className="mt-6">
+    <section aria-labelledby="related-heading" className="mt-12">
       <div className="mb-3 flex items-baseline justify-between gap-3">
         <h2 id="related-heading" className="text-lg font-semibold text-slate-900">
           More from {formatLabel(category)}

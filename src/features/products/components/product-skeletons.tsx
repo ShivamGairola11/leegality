@@ -48,17 +48,18 @@ export function CatalogSkeleton() {
 
 export function ProductDetailSkeleton() {
   return (
-    <div className="px-4 py-4 sm:px-6 lg:py-6">
+    <div className="flex-1 bg-white px-4 py-4 sm:px-6 lg:py-6">
+      <Skeleton className="mb-6 h-5 w-64" />
       <div
         role="status"
         aria-label="Loading product"
-        className="grid gap-6 rounded-lg bg-white p-4 shadow-sm sm:p-6 md:grid-cols-2 md:gap-0"
+        className="grid gap-8 md:grid-cols-2 lg:gap-12"
       >
-        <div className="space-y-4 md:pr-8">
+        <div className="space-y-4">
           <Skeleton className="h-8 w-20" />
           <Skeleton className="mx-auto aspect-square w-full max-w-md" />
         </div>
-        <div className="space-y-4 md:border-l md:border-gray-200 md:pl-8">
+        <div className="space-y-4">
           <Skeleton className="h-7 w-2/3" />
           <Skeleton className="h-6 w-1/3" />
           <Skeleton className="h-4 w-1/4" />

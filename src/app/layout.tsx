@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </Suspense>
             }
           />
-          <main className="flex-1">{children}</main>
+          <main className="flex flex-1 flex-col">{children}</main>
         </SidebarProvider>
       </body>
     </html>
