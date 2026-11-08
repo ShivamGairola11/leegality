@@ -22,7 +22,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             alt={product.title}
             fill
             priority={priority}
-            sizes="(min-width: 1280px) 220px, (min-width: 640px) 30vw, 45vw"
+            sizes="(min-width: 1536px) 18vw, (min-width: 1280px) 22vw, (min-width: 640px) 30vw, 45vw"
             className="object-contain p-2 transition-transform duration-300 group-hover:scale-105"
           />
         </div>

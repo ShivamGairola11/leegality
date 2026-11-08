@@ -15,7 +15,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="relative mx-auto aspect-square w-full max-w-md">
+      <div className="relative mx-auto aspect-square w-full max-w-md xl:max-w-lg">
         {src && (
           <Image
             key={src}
@@ -23,7 +23,7 @@ export function ProductGallery({ images, title }: ProductGalleryProps) {
             alt={images.length > 1 ? `${title}, image ${page} of ${images.length}` : title}
             fill
             priority
-            sizes="(min-width: 768px) 448px, 90vw"
+            sizes="(min-width: 1280px) 512px, (min-width: 768px) 448px, 90vw"
             className="object-contain"
           />
         )}

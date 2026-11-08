@@ -48,7 +48,7 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
   };
 
   return (
-    <div className="mx-auto flex max-w-7xl gap-6 px-4 py-4 sm:px-6 lg:py-6">
+    <div className="flex gap-6 px-4 py-4 sm:px-6 lg:py-6">
       <aside
         aria-label="Filters"
         className={cn("hidden w-60 shrink-0", isDesktopOpen && "lg:block")}

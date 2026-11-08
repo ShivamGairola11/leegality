@@ -5,6 +5,8 @@
 }
 
 @theme {
+  --breakpoint-3xl: 112rem;
+
   --color-navbar: #2f3e50;
   --color-navbar-muted: #3d4f63;
   --color-canvas: #f3f4f6;

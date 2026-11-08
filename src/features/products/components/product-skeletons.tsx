@@ -34,7 +34,7 @@ function FilterPanelSkeleton() {
 
 export function CatalogSkeleton() {
   return (
-    <div className="mx-auto flex max-w-7xl gap-6 px-4 py-4 sm:px-6 lg:py-6">
+    <div className="flex gap-6 px-4 py-4 sm:px-6 lg:py-6">
       <aside className="hidden w-60 shrink-0 rounded-lg border border-gray-200 bg-white p-4 lg:block">
         <FilterPanelSkeleton />
       </aside>
@@ -48,7 +48,7 @@ export function CatalogSkeleton() {
 
 export function ProductDetailSkeleton() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:py-6">
+    <div className="px-4 py-4 sm:px-6 lg:py-6">
       <div
         role="status"
         aria-label="Loading product"

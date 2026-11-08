@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 
 export default function NotFound() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <div className="px-4 py-10 sm:px-6">
       <EmptyState
         title="Page not found"
         description="The page you're looking for doesn't exist or has been moved."

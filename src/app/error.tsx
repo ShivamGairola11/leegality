@@ -11,7 +11,7 @@ export default function Error({ error, retry }: { error: unknown; retry: () => v
   }, [error]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <div className="px-4 py-10 sm:px-6">
       <EmptyState
         icon={<AlertIcon width={40} height={40} className="text-red-500" />}
         title="Something went wrong"

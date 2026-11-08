@@ -9,7 +9,7 @@ export function ProductDetail({ product }: { product: Product }) {
   const images = product.images.length > 0 ? product.images : [product.thumbnail];
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:py-6">
+    <div className="px-4 py-4 sm:px-6 lg:py-6">
       <article className="grid gap-6 rounded-lg bg-white p-4 shadow-sm sm:p-6 md:grid-cols-2 md:gap-0">
         <div className="flex flex-col gap-4 md:pr-8">
           <BackButton />
@@ -39,7 +39,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
           <section className="space-y-2 py-5">
             <h2 className="text-base font-semibold text-slate-900">Description</h2>
-            <p className="text-sm leading-relaxed text-slate-600">{product.description}</p>
+            <p className="max-w-prose text-sm leading-relaxed text-slate-600">{product.description}</p>
           </section>
 
           <section className="space-y-3 pt-5">
