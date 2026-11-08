@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProduct } from "@/features/products/api/products";
+import { getProduct, getProducts } from "@/features/products/api/products";
 import { ProductDetail } from "@/features/products/components/detail/product-detail";
+import { PRERENDERED_PRODUCTS } from "@/features/products/constants";
+
+export async function generateStaticParams() {
+  const products = await getProducts(null);
+  return products.slice(0, PRERENDERED_PRODUCTS).map((product) => ({ id: String(product.id) }));
+}
 
 export async function generateMetadata({ params }: PageProps<"/product/[id]">): Promise<Metadata> {
   const product = await getProduct((await params).id);
