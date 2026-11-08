@@ -19,7 +19,7 @@ interface ProductReviewsProps {
 
 function RatingBreakdown({ rating, reviews }: ProductReviewsProps) {
   return (
-    <div className="flex flex-col gap-4 rounded-lg bg-gray-50 p-4 sm:flex-row sm:items-center sm:gap-6">
+    <div className="flex flex-col gap-4 rounded-lg bg-surface-muted p-4 sm:flex-row sm:items-center sm:gap-6">
       <div className="shrink-0 text-center sm:w-28">
         <p className="text-3xl font-semibold text-slate-900">{rating.toFixed(1)}</p>
         <Rating value={rating} showValue={false} />

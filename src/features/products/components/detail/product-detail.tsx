@@ -17,7 +17,7 @@ export function ProductDetail({ product }: { product: Product }) {
   const category = formatLabel(product.category);
 
   return (
-    <div className="flex-1 bg-white px-4 py-4 sm:px-6 lg:py-6">
+    <div className="flex-1 px-4 py-4 sm:px-6 lg:py-6">
       <div className="mb-6">
         <Breadcrumbs
           items={[
@@ -46,7 +46,6 @@ export function ProductDetail({ product }: { product: Product }) {
               price={product.price}
               discountPercentage={product.discountPercentage}
               size="lg"
-              showBadge
             />
             <div>
               <StockStatus stock={product.stock} />

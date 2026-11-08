@@ -16,6 +16,7 @@ interface RatingProps {
   value: number;
   size?: keyof typeof sizes;
   showValue?: boolean;
+  valuePosition?: "before" | "after";
   className?: string;
 }
 
@@ -25,12 +26,21 @@ function Stars({ size }: { size: number }) {
   ));
 }
 
-export function Rating({ value, size = "sm", showValue = true, className }: RatingProps) {
+export function Rating({
+  value,
+  size = "sm",
+  showValue = true,
+  valuePosition = "after",
+  className,
+}: RatingProps) {
   const { star, text } = sizes[size];
   const fill = Math.min(Math.max(value / MAX_RATING, 0), 1) * 100;
 
   return (
     <span className={cn("inline-flex items-center gap-1", className)}>
+      {showValue && valuePosition === "before" && (
+        <span className={cn("text-slate-700", text)}>{value.toFixed(1)}</span>
+      )}
       <span
         role="img"
         aria-label={`Rated ${value.toFixed(1)} out of ${MAX_RATING}`}
@@ -43,7 +53,9 @@ export function Rating({ value, size = "sm", showValue = true, className }: Rati
           <Stars size={star} />
         </span>
       </span>
-      {showValue && <span className={cn("text-slate-500", text)}>({value.toFixed(1)})</span>}
+      {showValue && valuePosition === "after" && (
+        <span className={cn("text-slate-500", text)}>({value.toFixed(1)})</span>
+      )}
     </span>
   );
 }

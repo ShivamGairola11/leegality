@@ -55,7 +55,7 @@ export function FilterPanel({
     <fieldset
       disabled={disabled}
       aria-busy={disabled}
-      className="min-w-0 space-y-4 transition-opacity disabled:opacity-60"
+      className="min-w-0 space-y-6 transition-opacity disabled:opacity-60"
     >
       <legend className="sr-only">Product filters</legend>
       <Input
@@ -98,7 +98,7 @@ export function FilterPanel({
         <button
           type="button"
           onClick={onClear}
-          className="w-full border-t border-gray-200 pt-3 text-left text-sm font-medium text-primary hover:underline"
+          className="text-left text-sm font-medium text-primary hover:underline"
         >
           Clear all filters ({activeCount})
         </button>

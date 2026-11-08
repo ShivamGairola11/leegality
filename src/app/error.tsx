@@ -17,7 +17,7 @@ export default function Error({ error, retry }: { error: unknown; retry: () => v
         title="Something went wrong"
         description="We couldn't load products right now. Check your connection and try again."
         action={<Button onClick={retry}>Try again</Button>}
-        className="rounded-lg bg-white shadow-sm"
+        className="rounded-lg bg-surface-muted"
       />
     </div>
   );

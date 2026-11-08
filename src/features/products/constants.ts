@@ -4,6 +4,8 @@ export const PAGE_SIZE = 12;
 
 export const LOW_STOCK_THRESHOLD = 5;
 
+export const TOP_RATED_THRESHOLD = 4.5;
+
 export const RELATED_PRODUCTS_LIMIT = 6;
 
 export const PRERENDERED_PRODUCTS = 24;

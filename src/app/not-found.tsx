@@ -13,7 +13,7 @@ export default function NotFound() {
             Back to products
           </Link>
         }
-        className="rounded-lg bg-white shadow-sm"
+        className="rounded-lg bg-surface-muted"
       />
     </div>
   );

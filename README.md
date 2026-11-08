@@ -127,6 +127,7 @@ tests/
 - The price range applies on **Apply** (or Enter), as in the mockup, rather than on every keystroke.
 - `price` is the selling price. The struck-through original price is worked back from `discountPercentage`, and discounts that round to 0% are hidden.
 - Stock labels show "Only N left" at 5 or fewer and "Out of stock" at 0.
+- The "Top rated" tag on a card is shown for products rated 4.5 or higher. It comes from real data, not a made-up marketing label.
 - The large rating in the review summary is the product's overall `rating`. The bars break down the individual reviews the API returns, usually 3.
 - The pagination under the detail image in the mockup is used to page through the product's images, alongside thumbnails.
 - Navbar search matches product title and brand. The search box inside the filter panel narrows the category and brand lists.

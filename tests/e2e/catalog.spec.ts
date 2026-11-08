@@ -9,8 +9,10 @@ async function openFilters(page: Page, isMobile: boolean) {
 const productCards = (page: Page) => page.locator('main a[href^="/product/"]').filter({ visible: true });
 
 async function prices(page: Page) {
-  const texts = await productCards(page).locator("span.font-semibold.text-slate-900").allTextContents();
-  return texts.map((text) => Number(text.replace(/[$,]/g, "")));
+  const values = await productCards(page).locator("[data-price]").evaluateAll((nodes) =>
+    nodes.map((node) => Number(node.getAttribute("data-price"))),
+  );
+  return values;
 }
 
 test("lists products with categories loaded from the API", async ({ page, isMobile }) => {

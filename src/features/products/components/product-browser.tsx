@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { AlertIcon, SearchIcon } from "@/components/icons";
+import { AlertIcon, SlidersIcon } from "@/components/icons";
 import { useSidebar } from "@/components/layout/sidebar-provider";
 import { Button } from "@/components/ui/button";
 import { Drawer } from "@/components/ui/drawer";
@@ -68,7 +68,7 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
         aria-label="Filters"
         className={cn("hidden w-60 shrink-0", isDesktopOpen && "lg:block")}
       >
-        <div className="sticky top-20 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="sticky top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto pr-2 pb-4">
           <FilterPanel {...panelProps} />
         </div>
       </aside>
@@ -78,29 +78,25 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
       </Drawer>
 
       <section aria-labelledby="catalog-heading" className="min-w-0 flex-1">
-        <h1 id="catalog-heading" className="sr-only">
-          Products
-        </h1>
-
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <Button
-            variant="ghost"
-            onClick={toggle}
-            aria-expanded={isDesktopOpen}
-            className="-ml-3 font-semibold text-slate-800"
-          >
-            <SearchIcon width={18} height={18} />
-            Filters
-            {activeCount > 0 && (
-              <span className="rounded-full bg-primary px-1.5 text-xs leading-5 text-white">
-                {activeCount}
-              </span>
-            )}
-          </Button>
-          <div className="flex items-center gap-3">
-            <p aria-live="polite" className="text-sm text-slate-500 max-sm:hidden">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-baseline gap-3">
+            <h1 id="catalog-heading" className="text-xl font-bold text-slate-900">
+              Results
+            </h1>
+            <p aria-live="polite" className="text-sm text-slate-500">
               {isPending ? "Loading…" : `${visible.length} products`}
             </p>
+          </div>
+          <div className="flex items-center gap-2 max-sm:w-full max-sm:justify-between">
+            <Button variant="outline" onClick={toggle} className="lg:hidden">
+              <SlidersIcon width={16} height={16} />
+              Filters
+              {activeCount > 0 && (
+                <span className="rounded-full bg-primary px-1.5 text-xs leading-5 text-white">
+                  {activeCount}
+                </span>
+              )}
+            </Button>
             <SortSelect value={filters.sort} onChange={setSort} />
           </div>
         </div>
@@ -147,7 +143,7 @@ export function ProductBrowser({ categories, products }: ProductBrowserProps) {
                 </Button>
               )
             }
-            className="rounded-lg border border-dashed border-gray-300 bg-white"
+            className="rounded-lg bg-surface-muted"
           />
         )}
       </section>

@@ -1,3 +1,8 @@
+/*
+ * Design tokens live in @theme, so every colour, breakpoint and animation is
+ * a Tailwind utility (bg-surface-muted, text-deal, 3xl:...). Components only
+ * reference these names, which keeps the palette in one place.
+ */
 @import "tailwindcss";
 
 @theme inline {
@@ -8,10 +13,12 @@
   --breakpoint-3xl: 112rem;
 
   --color-navbar: #2f3e50;
-  --color-canvas: #f3f4f6;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f7f8;
   --color-primary: #2d8cf0;
   --color-primary-hover: #1c78d8;
-  --color-star: #f5b400;
+  --color-star: #f5a623;
+  --color-deal: #cc0c39;
 
   --animate-fade-in: fade-in 200ms ease-out;
 
@@ -25,18 +32,20 @@
   }
 }
 
-body {
-  @apply bg-canvas text-slate-800;
-}
+@layer base {
+  body {
+    @apply bg-surface text-slate-800;
+  }
 
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
-input[type="number"] {
-  -moz-appearance: textfield;
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
 
 ::view-transition-group(.morph) {
