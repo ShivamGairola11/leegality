@@ -13,7 +13,7 @@ An Amazon-style product listing and detail app built on the [DummyJSON Products 
 - Filters for category (loaded from the API), price range and brand (taken from the loaded products), all combinable
 - Sorting by price, rating, discount or name
 - Removable chips for every active filter, plus a "Clear all" button
-- Navbar search that filters as you type
+- Navbar search, debounced (300ms) and applied from 3 characters, or straight away on Enter
 - On mobile, filters open in a drawer and categories are also shown as scrollable pills
 
 **Detail**
@@ -36,6 +36,22 @@ An Amazon-style product listing and detail app built on the [DummyJSON Products 
 - Filters live in the URL, so Back, refresh and shared links all keep them
 - Loading skeletons, an error state with retry, empty states and 404 pages
 - Mobile-first, keyboard-accessible, and animations turn off when the user prefers reduced motion
+
+## Requirements checklist
+
+| Requirement (from the brief)                          | Where it's handled                                                                 |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Listing: filters on the left, product grid on the right | `features/products/components/product-browser.tsx`                                |
+| Card shows image, title, price, rating; opens `/product/:id` | `product-card.tsx`                                                          |
+| Pagination                                            | `components/ui/pagination.tsx`, `lib/pagination.ts` (25 per page)                  |
+| Category filter loaded from `/products/categories`    | `api/products.ts` → `getCategories`, plus `/products/category/{slug}` for the list |
+| Price range (min/max) filter                          | `filters/price-range-filter.tsx`                                                   |
+| Brand filter from fetched products, multi-select      | `lib/filters.ts` → `getBrands`                                                     |
+| Filters combine, update immediately, reset pagination | `lib/filters.ts` → `applyFilters`, `hooks/use-product-filters.ts`                  |
+| Loading state and error handling                      | `product-skeletons.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`               |
+| Detail page: image, name, price, rating, description, brand, category | `detail/product-detail.tsx`, data from `/products/{id}`            |
+| Back button keeps the previous filters                | Filters live in the URL, `detail/back-button.tsx`                                  |
+| Functional components, hooks, routing, Tailwind, no heavy UI library | Throughout. The only runtime dependencies are `next`, `react` and `react-dom` |
 
 ## Tech stack
 
@@ -83,10 +99,11 @@ Before running e2e tests for the first time, install the browser with `npx playw
 src/
 ├── app/                      # Routes only: pages, loading, error and not-found files
 │   ├── page.tsx              # Product listing
-│   └── product/[id]/         # Product detail
+│   ├── product/[id]/         # Product detail
+│   └── cart/                 # Shopping cart
 ├── components/
-│   ├── ui/                   # Generic building blocks: Button, Select, Badge, Rating, Pagination, Drawer, Breadcrumbs...
-│   ├── layout/               # App shell: Navbar, sidebar state
+│   ├── ui/                   # Generic building blocks: Button, Select, Badge, Rating, Pagination, Drawer, Toaster...
+│   ├── layout/               # App shell: Navbar, sidebar state, profile button
 │   └── icons.tsx
 ├── features/
 │   ├── cart/                 # Cart store, pure cart logic, carts API, cart UI
@@ -97,13 +114,13 @@ src/
 │       ├── lib/              # Pure helpers: filters, sorting, pricing
 │       ├── constants.ts
 │       └── types.ts
-└── lib/                      # App-wide helpers: API client, pagination, formatting
+└── lib/                      # App-wide helpers: env, API client, pagination, breakpoints, formatting
 tests/
-├── unit/                     # Pure logic (filters, sorting, pricing, pagination)
-└── e2e/                      # User flows on desktop and mobile
+├── unit/                     # Pure logic (filters, sorting, pricing, pagination, cart)
+└── e2e/                      # User flows on desktop and mobile (catalog, product, cart)
 ```
 
-`components/ui` knows nothing about products, and `features/products` holds all product logic. A new feature, such as a cart, would get its own folder under `features/` without touching existing code.
+`components/ui` knows nothing about products, and each feature keeps its own API calls, hooks, logic and components. The cart was added as a second feature folder with almost no changes to existing code, which is how the structure is meant to scale. Shared layout pieces such as the navbar take feature parts as props (`search`, `actions`), so `components/` never imports from `features/`.
 
 ## Architectural decisions
 
@@ -156,14 +173,14 @@ tests/
 - The "Top rated" tag on a card is shown for products rated 4.5 or higher. It comes from real data, not a made-up marketing label.
 - The large rating in the review summary is the product's overall `rating`. The bars break down the individual reviews the API returns, usually 3.
 - The pagination under the detail image in the mockup is used to page through the product's images, alongside thumbnails.
-- Navbar search matches product title and brand. The search box inside the filter panel narrows the category and brand lists.
+- Navbar search matches product title and brand, and queries shorter than 3 characters are ignored. The search box inside the filter panel narrows the category and brand lists.
 - Profile and checkout are out of scope. They show a demo toast instead of a fake sign-in or payment flow.
 - Products without a brand (some groceries) show "Unbranded" and are hidden when a brand filter is active.
 
 ## Improvements with more time
 
 - Sync the cart to a real user cart on the server (DummyJSON's cart endpoints only simulate writes)
-- Debounce the navbar search and add keyboard-navigable suggestions
+- Keyboard-navigable search suggestions in the navbar
 - Visual regression snapshots in Playwright
 - Image blur placeholders, and prefetching the next page of images
 - Directional page slides (forward and back) on top of the image morph
